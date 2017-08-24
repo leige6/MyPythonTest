@@ -13,7 +13,7 @@ sys.setdefaultencoding('utf8')
 
 
 
-
+tart_time=time.time()
 driver = webdriver.PhantomJS(executable_path="D:\Python27\Scripts\phantomjs.exe")
 driver.get('http://www.ip138.com/post')
 father_handle=driver.current_window_handle
@@ -57,7 +57,6 @@ for province in provinces:
     print u"%s各县市邮政编码信息一共%d个" %(p_name,total)    
     driver.close() #关闭切换的窗口
     driver.switch_to_window(father_handle) #切换回原来窗口
-    break
     
 '''
 i=1
@@ -105,12 +104,10 @@ cursor.execute(sql)
 cursor = db.cursor()
 
 # SQL 插入语句
-sql = "INSERT INTO POST(CITY_NAME,POST_CODE, ZONE_CODE, PROVINCE_NAME) VALUES ('%s', '%s', '%s', '%s')" 
-print post     
+sql = "INSERT INTO POST(CITY_NAME,POST_CODE, ZONE_CODE, PROVINCE_NAME) VALUES (%s,%s,%s,%s)"     
 try:
    # 执行sql语句
    cursor.executemany(sql,post)
-   cursor.execute(sql)
    # 提交到数据库执行
    db.commit()
 except Exception as e:
@@ -118,7 +115,9 @@ except Exception as e:
    # 发生错误时回滚
    db.rollback()
 # 关闭数据库连接
-db.close()    
-print u"操作结束"
+db.close()   
+end_time=time.time() 
+total=end_time-start_time
+print u"数据获取结束:共耗时:%d" %total
 time.sleep(5) 
 driver.close()
